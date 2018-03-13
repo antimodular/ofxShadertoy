@@ -38,3 +38,7 @@ This addon is distributed under the terms of the MIT License.
 I've set up some extensions to the shader parameters, mostly relating to using a camera (for use, non-exclusively, with another one of my addons, ofxFPSControls). The new uniforms are:
 
 `uniform mat4 tCameraMatrix;` - a camera matrix that can be set up using `ofCamera` or any child class (e.g. [ofxFPSControls](https://github.com/tiagosr/ofxFPSControls))
+
+## Additions
+
+Added custom vec3 and vec4 variables to be passed to the shader.
