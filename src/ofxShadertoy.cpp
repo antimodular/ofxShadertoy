@@ -47,7 +47,9 @@ bool ofxShadertoy::load(string shaderfilename, bool chan0cube, bool chan1cube, b
            "uniform vec4      iDate;\n"
            "uniform float     iSampleRate;\n"
            "uniform vec3      iChannelResolution[4];\n"
-           "uniform mat4      tCameraMatrix;\n")+
+           "uniform mat4      tCameraMatrix;\n"
+           "uniform vec3      iCustomVec3;\n"
+           "uniform vec4      iCustomVec4;\n")+
     string(chan0cube?"uniform sampler2DCube iChannel0;\n":"uniform sampler2D  iChannel0;\n")+
     string(chan1cube?"uniform sampler2DCube iChannel1;\n":"uniform sampler2D  iChannel1;\n")+
     string(chan2cube?"uniform sampler2DCube iChannel2;\n":"uniform sampler2D  iChannel2;\n")+
@@ -73,6 +75,9 @@ bool ofxShadertoy::load(string shaderfilename, bool chan0cube, bool chan1cube, b
             currentShader.setUniform3f("iResolution", dimensions.x, dimensions.y, 4.0f);
             currentShader.setUniform4f("iDate", ofGetYear(), ofGetMonth(), ofGetDay(), ((ofGetHours()*60+ofGetMinutes())*60)+ofGetSeconds());
             currentShader.setUniformMatrix4f("tCameraMatrix", ofMatrix4x4::newIdentityMatrix());
+            currentShader.setUniform3f("iCustomVec3", customVec3.x, customVec3.y, customVec3.z);
+            currentShader.setUniform4f("iCustomVec4", customVec4.x, customVec4.y, customVec4.z, customVec4.w);
+ 
             shader = currentShader;
             return true;
         } else {
@@ -88,6 +93,8 @@ void ofxShadertoy::begin() const {
     shader.setUniform1f("iTime", globalTime);
     shader.setUniform4f("iMouse", mousepos.x, mousepos.y, ofGetMousePressed()?1:0, 0);
     shader.setUniform3f("iResolution", dimensions.x, dimensions.y, 4.0f);
+    shader.setUniform3f("iCustomVec3", customVec3.x, customVec3.y, customVec3.z);
+    shader.setUniform4f("iCustomVec4", customVec4.x, customVec4.y, customVec4.z, customVec4.w);
     shader.setUniform4f("iDate", ofGetYear(), ofGetMonth(), ofGetDay(), ((ofGetHours()*60+ofGetMinutes())*60)+ofGetSeconds());
     if(camera) {
         ofMatrix4x4 cmtx(camera->getOrientationQuat());
@@ -134,6 +141,12 @@ void ofxShadertoy::setUseMouse(bool use) {
 
 void ofxShadertoy::setCamera(ofCamera* cam) {
     camera = cam;
+}
+void ofxShadertoy::setCustomVec3(ofVec3f _point) {
+    customVec3 = _point;
+}
+void ofxShadertoy::setCustomVec4(float x,float y,float z,float w) {
+    customVec4 = ofVec4f(x,y,z,w);
 }
 
 void ofxShadertoy::setTexture(int index, const ofTexture& tex) {

@@ -16,6 +16,8 @@ protected:
     bool useMouse, advanceTime;
     ofVec2f mousepos;
     ofVec2f dimensions;
+    ofVec3f customVec3;
+     ofVec4f customVec4;
     ofCamera *camera;
     double globalTime;
 public:
@@ -40,4 +42,6 @@ public:
     virtual void setWidth(float w) { dimensions.x = w; }
     virtual void setHeight(float h) { dimensions.y = h; }
     virtual void setTexture(int index, const ofTexture& tex);
+    virtual void setCustomVec3(ofVec3f _point);
+    virtual void setCustomVec4(float x,float y,float z,float w);
 };
