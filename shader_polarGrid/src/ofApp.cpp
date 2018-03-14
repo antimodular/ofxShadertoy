@@ -15,18 +15,21 @@ void ofApp::setup(){
     
     gui_main.add(bShowGui.set("bShowGui",true));
     
+     gui_main.add(bShowGrid.set("bShowGrid",false));
     //vec4(2.0 + cos(iTime), 5.0, M_PI/6., 5.*M_PI/6.+ 4.*sin(iTime/2.)*M_PI/6.);
     gui_main.add(val_x.set("X",0,0,PI));
     gui_main.add(val_y.set("Y",M_PI,0,2*M_PI));
     gui_main.add(val_z.set("Z",0,0,2*M_PI));
     gui_main.add(val_w.set("W",M_PI,0,2*M_PI));
     
+    gui_main.add(offset_x.set("offset_x",0,-1,1));
+    gui_main.add(offset_y.set("offset_y",0,-1,1));
     gui_main.loadFromFile("gui_main.xml");
     
     shadertoy.load("shaders/polarGrid.frag");
     ofImage img;
     img.load("img.jpg");
-    
+    ofLog()<<"img "<<img.getWidth()<<" , "<< img.getHeight();
     ofTexture tex;
     tex.allocate(img.getWidth(), img.getHeight(), GL_RGBA, false); // fourth parameter is false to avoid generation of a GL_TEXTURE_2D_RECTANGLE texture - we don't want this.
     tex.loadData(img.getPixels());
@@ -40,14 +43,14 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    //    shadertoy.setCustomVec3(ofVec3f(mouseX,mouseY,5));
+    shadertoy.setCustomVec3(ofVec3f(offset_x,offset_y,0));
     shadertoy.setCustomVec4(val_x,val_y,val_z,val_w);
-    
+    shadertoy.setCustomInt0(int(bShowGrid));
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    shadertoy.draw(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
+    shadertoy.draw(0, 0,1024,768); //, ofGetWindowWidth(), ofGetWindowHeight());
     
     if(bShowGui) {
         gui_main.draw();

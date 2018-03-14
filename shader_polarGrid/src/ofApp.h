@@ -27,8 +27,12 @@ class ofApp : public ofBaseApp{
     
     ofxPanel gui_main;
     ofParameter<bool> bShowGui;
+    ofParameter<bool> bShowGrid;
        ofParameter<float> val_x;
     ofParameter<float> val_y;
     ofParameter<float> val_z;
       ofParameter<float> val_w;
+                          
+    ofParameter<float>  offset_x;
+    ofParameter<float>  offset_y;
  };

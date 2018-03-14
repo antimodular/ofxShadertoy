@@ -94,7 +94,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
 //    vec4 u_limits2 = vec4(iMouse.x, 5.0, M_PI/6., iMouse.y);
 // vec4 u_limits2 = vec4(iCustomVec3.x, 5.0, M_PI/6., iCustomVec3.y);
- vec4 u_limits2 = vec4(iCustomVec4.x, iCustomVec4.y,iCustomVec4.z, iCustomVec4.w);    
+    vec4 u_limits2 = vec4(iCustomVec4.x, iCustomVec4.y,iCustomVec4.z, iCustomVec4.w);    
+    
     const float u_antialias = 1.0;
     vec2 u_major_grid_step = vec2(1.0, M_PI/6.0);
     vec2 u_minor_grid_step = vec2(0.25, M_PI/60.0);
@@ -109,11 +110,15 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         v_texcoord.x = fragCoord.x/iResolution.y - 0.5
         - 0.5*(iResolution.x-iResolution.y)/iResolution.y;
         v_texcoord.y = fragCoord.y/iResolution.y - 0.5;
+     
     } else {    
         v_texcoord.x = fragCoord.x/iResolution.x - 0.5;
         v_texcoord.y = fragCoord.y/iResolution.x - 0.5
         - 0.5*(iResolution.y-iResolution.x)/iResolution.x;
     }
+    v_texcoord.x += iCustomVec3.x;
+    v_texcoord.y += iCustomVec3.y;
+    
     vec2 v_size = iResolution.xy;    
     
     
@@ -163,6 +168,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     float m = min(mx,my);
     
     // Here we take care of "finishing" the border lines
+    
+    //---background color
     if( outside.x && outside.y ) {
         if (Mx > 0.5*(u_major_grid_width + u_antialias)) {
             fragColor = vec4(1); return;
@@ -185,25 +192,33 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         }
     }
     
+   
     // Mix major/minor colors to get dominant color
-    vec4 color = u_major_grid_color;
-    float alpha1 = stroke_alpha( M, u_major_grid_width, u_antialias);
-    float alpha2 = stroke_alpha( m, u_minor_grid_width, u_antialias);
-    float alpha  = alpha1;
-    if( alpha2 > alpha1*1.5 )
-    {
-        alpha = alpha2;
-        color = u_minor_grid_color;
+    if(iCustomInt0 == 1){ 
+        vec4 color = u_major_grid_color;
+        float alpha1 = stroke_alpha( M, u_major_grid_width, u_antialias);
+        float alpha2 = stroke_alpha( m, u_minor_grid_width, u_antialias);
+        float alpha  = alpha1;
+        
+        if( alpha2 > alpha1*1.5 )
+        {
+            alpha = alpha2;
+            color = u_minor_grid_color;
+        }
+        
+        
+        
+        // At no extra cost we can also project a texture
+        if( outside.x || outside.y ) {
+            fragColor = mix(vec4(1,1,1,1), color, alpha);
+        } else {
+            vec4 texcolor = texture(iChannel0, vec2(NP2.x+0.5, 0.5-NP2.y));
+            fragColor = mix(texcolor, color, color.a*alpha);
+        }
+    }else{
+            fragColor = texture(iChannel0, vec2(NP2.x+0.5, 0.5-NP2.y));
     }
-    
-    
-    // At no extra cost we can also project a texture
-    if( outside.x || outside.y ) {
-        fragColor = mix(vec4(1,1,1,1), color, alpha);
-    } else {
-        vec4 texcolor = texture(iChannel0, vec2(NP2.x+0.5, 0.5-NP2.y));
-        fragColor = mix(texcolor, color, color.a*alpha);
-    }
+        
     //    fragColor = mix(vec4(1,1,1,1), color, alpha);
 }
 
