@@ -18,6 +18,7 @@ protected:
     ofVec2f dimensions;
     ofVec3f customVec3;
      ofVec4f customVec4;
+    int customInt0;
     ofCamera *camera;
     double globalTime;
 public:
@@ -44,4 +45,5 @@ public:
     virtual void setTexture(int index, const ofTexture& tex);
     virtual void setCustomVec3(ofVec3f _point);
     virtual void setCustomVec4(float x,float y,float z,float w);
+    virtual void setCustomInt0(int _val);
 };

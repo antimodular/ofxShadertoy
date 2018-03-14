@@ -49,7 +49,8 @@ bool ofxShadertoy::load(string shaderfilename, bool chan0cube, bool chan1cube, b
            "uniform vec3      iChannelResolution[4];\n"
            "uniform mat4      tCameraMatrix;\n"
            "uniform vec3      iCustomVec3;\n"
-           "uniform vec4      iCustomVec4;\n")+
+           "uniform vec4      iCustomVec4;\n"
+           "uniform int      iCustomInt0;\n")+
     string(chan0cube?"uniform sampler2DCube iChannel0;\n":"uniform sampler2D  iChannel0;\n")+
     string(chan1cube?"uniform sampler2DCube iChannel1;\n":"uniform sampler2D  iChannel1;\n")+
     string(chan2cube?"uniform sampler2DCube iChannel2;\n":"uniform sampler2D  iChannel2;\n")+
@@ -77,7 +78,7 @@ bool ofxShadertoy::load(string shaderfilename, bool chan0cube, bool chan1cube, b
             currentShader.setUniformMatrix4f("tCameraMatrix", ofMatrix4x4::newIdentityMatrix());
             currentShader.setUniform3f("iCustomVec3", customVec3.x, customVec3.y, customVec3.z);
             currentShader.setUniform4f("iCustomVec4", customVec4.x, customVec4.y, customVec4.z, customVec4.w);
- 
+            currentShader.setUniform1i("iCustomInt0", customInt0);
             shader = currentShader;
             return true;
         } else {
@@ -95,6 +96,7 @@ void ofxShadertoy::begin() const {
     shader.setUniform3f("iResolution", dimensions.x, dimensions.y, 4.0f);
     shader.setUniform3f("iCustomVec3", customVec3.x, customVec3.y, customVec3.z);
     shader.setUniform4f("iCustomVec4", customVec4.x, customVec4.y, customVec4.z, customVec4.w);
+    shader.setUniform1i("iCustomInt0", customInt0);
     shader.setUniform4f("iDate", ofGetYear(), ofGetMonth(), ofGetDay(), ((ofGetHours()*60+ofGetMinutes())*60)+ofGetSeconds());
     if(camera) {
         ofMatrix4x4 cmtx(camera->getOrientationQuat());
@@ -147,6 +149,9 @@ void ofxShadertoy::setCustomVec3(ofVec3f _point) {
 }
 void ofxShadertoy::setCustomVec4(float x,float y,float z,float w) {
     customVec4 = ofVec4f(x,y,z,w);
+}
+void ofxShadertoy::setCustomInt0(int _vol) {
+    customInt0 = _vol;
 }
 
 void ofxShadertoy::setTexture(int index, const ofTexture& tex) {
