@@ -1,7 +1,7 @@
 # ofxShadertoy
 
 ![ofxaddons](https://raw.githubusercontent.com/tiagosr/ofxShadertoy/master/ofxaddons_thumbnail.png)
-(https://github.com/antimodular/ofxShadertoy/blob/dev_customVariables/polar2.gif)
+(https://raw.githubusercontent.com/antimodular/ofxShadertoy/dev_customVariables/polar2.gif)
 
 openFrameworks addon for loading and displaying shaders from the [Shadertoy](https://www.shadertoy.com) page.  
 Shadertoy is (c) iq  
